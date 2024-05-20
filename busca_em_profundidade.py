@@ -67,6 +67,29 @@ def create_graph(graph, pos):
 
 
 # aqui que vem a brincadeira
+
+def dfsOutput(graph, node):
+    # The video has visited as an array. I changed this to set because 'n not in visited' is O(1) instead of O(n).
+    # See this link for more: https://wiki.python.org/moin/TimeComplexity.
+    visited = set()
+    stack = []
+
+    visited.add(node)
+    stack.append(node) 
+
+    while stack:
+        s = stack.pop()
+        print(s, end = " ")
+
+        # Reverse iterate through the edge list so results match recursive version.
+        for n in reversed(graph[s]):
+            # Because visited is a set, this lookup is O(1).
+            if n not in visited:
+                visited.add(n)
+                stack.append(n)
+
+
+
 def DFS(G, s):
 
     #TODO ver se dá pra botar os dois atributos em crete_graph()
@@ -86,8 +109,7 @@ def DFS(G, s):
     color[s] = 'gray'
     λ[s] = 0
     Queue = [s]
-    
-    ## Isso daqui vai repetir muito kkkkkk
+
     updateGraph(G, pos, color)
 
 
@@ -100,14 +122,8 @@ def DFS(G, s):
                 π[v] = u
                 Queue.append(v)
         color[u] = "black"
-        ## Isso daqui vai repetir muito kkkkkk
         updateGraph(G, pos, color)
         
-    
-
-    
-    
-
     DFS_tree = nx.create_empty_copy(G)
 
     for v1, v2, data in G.edges(data=True) :
@@ -117,9 +133,6 @@ def DFS(G, s):
             DFS_tree.nodes[v1]['depth'] = π[v2]
 
     return DFS_tree
-
-
-    #
     
 
 
@@ -154,6 +167,8 @@ def main():
 
     size_condition: bool = len(coordinates) == len(graph)
     pos: dict = {}
+
+    # 
     try:
         if size_condition:
             for n in graph:
@@ -165,10 +180,15 @@ def main():
 
 
     try:
+        # output
+        dfsOutput(graph, aresta_inicial)
+
+        # desenho
         G = create_graph(graph, pos)
         DFS(G, aresta_inicial)
+
     except Exception as e:
-        print(e)
+        logging.error(traceback.format_exc())
 
 
     # nx.draw(graph_tree)
