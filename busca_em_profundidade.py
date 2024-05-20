@@ -7,8 +7,15 @@ import random
 import traceback
 import logging
 
-def updateColor(colors):
-    return 0
+def updateGraph(G, pos, color):
+    nx.set_node_attributes(G, color, name="color")
+    nx.draw(
+        G, 
+        with_labels=True, 
+        pos=pos,
+        node_color=retorno_lista_cores(G),
+        )
+    plt.show()
 
 def retorno_lista_cores(graph):
     colors: dict = {}
@@ -54,15 +61,21 @@ def create_graph(graph, pos):
 
     # Atributos de coordenadas
     nx.set_node_attributes(G, pos, name="pos")
+    
 
     return G
 
 
 # aqui que vem a brincadeira
 def DFS(G, s):
-    color: dict = {}
+
+    #TODO ver se dá pra botar os dois atributos em crete_graph()
+    color: dict = {} 
+    pos: list = retorno_posicoes(G)
+
     λ = {} #vetor de distancia, distância da aresta inicial ao vértice contabilizado
     π = {} #vetor de predecessores, antes de um vértice n qualquer
+
     for v in G.nodes() :
         color[v] = 'white'
         λ[v] = np.inf
@@ -75,14 +88,7 @@ def DFS(G, s):
     Queue = [s]
     
     ## Isso daqui vai repetir muito kkkkkk
-    nx.set_node_attributes(G, color, name="color")
-    nx.draw(
-        G, 
-        with_labels=True, 
-        pos=retorno_posicoes(G),
-        node_color=retorno_lista_cores(G),
-        )
-    plt.show()
+    updateGraph(G, pos, color)
 
 
     while Queue:
@@ -95,14 +101,7 @@ def DFS(G, s):
                 Queue.append(v)
         color[u] = "black"
         ## Isso daqui vai repetir muito kkkkkk
-        nx.set_node_attributes(G, color, name="color")
-        nx.draw(
-            G, 
-            with_labels=True, 
-            pos=retorno_posicoes(G),
-            node_color=retorno_lista_cores(G),
-            )
-        plt.show()
+        updateGraph(G, pos, color)
         
     
 
