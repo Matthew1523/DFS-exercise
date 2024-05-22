@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# import numpy as np
+import numpy as np
 # import random
 
 import traceback
@@ -92,13 +92,14 @@ def dfsOutput(graph, node):
 
 def DFS(G, s):
 
-    #TODO ver se dá pra botar os dois atributos em crete_graph()
+    #TODO ver se dá pra botar os atributos abaixo em crete_graph()
     color: dict = {} 
     pos: list = retorno_posicoes(G)
 
     λ = {} #vetor de distancia, distância da aresta inicial ao vértice contabilizado
     π = {} #vetor de predecessores, antes de um vértice n qualquer
 
+    # definição de todas as cores nos nós
     for v in G.nodes() :
         color[v] = 'white'
         λ[v] = np.inf
@@ -121,18 +122,9 @@ def DFS(G, s):
                 λ[v] = λ[u] + 1
                 π[v] = u
                 Queue.append(v)
-        color[u] = "black"
+        # visitados
+        color[u] = "yellow" 
         updateGraph(G, pos, color)
-        
-    DFS_tree = nx.create_empty_copy(G)
-
-    for v1, v2, data in G.edges(data=True) :
-        if (π[v2] is v1) or (π[v1] is v2 and not nx.is_directed(DFS_tree)):
-            DFS_tree.add_edge(v1, v2)
-            DFS_tree.nodes[v1]['depth'] = π[v1]
-            DFS_tree.nodes[v1]['depth'] = π[v2]
-
-    return DFS_tree
     
 
 
