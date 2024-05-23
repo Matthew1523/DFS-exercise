@@ -38,7 +38,6 @@ def retorno_posicoes(graph):
 
     return pos
 
-
 def create_graph(graph, pos):
 
     # Inicialização dos nós e chaves
@@ -68,64 +67,44 @@ def create_graph(graph, pos):
 
 # aqui que vem a brincadeira
 
-def dfsOutput(graph, node):
-    # The video has visited as an array. I changed this to set because 'n not in visited' is O(1) instead of O(n).
-    # See this link for more: https://wiki.python.org/moin/TimeComplexity.
-    visited = set()
-    stack = []
 
-    visited.add(node)
-    stack.append(node) 
-
-    while stack:
-        s = stack.pop()
-        print(s, end = " ")
-
-        # Reverse iterate through the edge list so results match recursive version.
-        for n in reversed(graph[s]):
-            # Because visited is a set, this lookup is O(1).
-            if n not in visited:
-                visited.add(n)
-                stack.append(n)
-
-
-
-def DFS(G, s):
+def DFS(Graph, node_start):
 
     #TODO ver se dá pra botar os atributos abaixo em crete_graph()
     color: dict = {} 
-    pos: list = retorno_posicoes(G)
+    pos: list = retorno_posicoes(Graph)
 
-    λ = {} #vetor de distancia, distância da aresta inicial ao vértice contabilizado
-    π = {} #vetor de predecessores, antes de um vértice n qualquer
-
-    # definição de todas as cores nos nós
-    for v in G.nodes() :
-        color[v] = 'white'
-        λ[v] = np.inf
-        π[v] = 'null'
-        G.nodes[v]["color"] = color[v]
+    # 1. definição atribuições de cores aos nós do grafo
+    for vertex in Graph.nodes() :
+        color[vertex] = 'white'
+        Graph.nodes[vertex]["color"] = color[vertex]
 
 
-    color[s] = 'gray'
-    λ[s] = 0
-    Queue = [s]
+    color[node_start] = 'gray'
+    updateGraph(Graph, pos, color)
 
-    updateGraph(G, pos, color)
+    # 2. DFS propriamente dito
+    visited = set()
+    stack = []
 
+    visited.add(node_start)
+    stack.append(node_start) 
 
-    while Queue:
-        u = Queue.pop(0)
-        for v in G.neighbors(u):
-            if color[v] == 'white':
-                color[v] = 'gray'
-                λ[v] = λ[u] + 1
-                π[v] = u
-                Queue.append(v)
-        # visitados
-        color[u] = "yellow" 
-        updateGraph(G, pos, color)
-    
+    while stack:
+        s = stack.pop()
+        # impressão do output
+        print(s, end = " ")
+        for vertex in Graph.neighbors(s):
+            if color[vertex] == 'white':
+                color[vertex] = 'gray'
+
+            if vertex not in visited:
+                stack.append(vertex)
+                visited.add(vertex)
+
+            
+        color[s] = "yellow" 
+        updateGraph(Graph, pos, color)
 
 
 def main():
@@ -172,10 +151,8 @@ def main():
 
 
     try:
-        # output
-        dfsOutput(graph, aresta_inicial)
 
-        # desenho
+        # desenho e output
         G = create_graph(graph, pos)
         DFS(G, aresta_inicial)
 
