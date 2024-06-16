@@ -1,3 +1,3 @@
-# DFS (atividade)
+# Atividade Grafos - Busca em Profundidade
 
-Trabalho do Edwins apenas pra apresentar rapidinho ༼ つ ◕_◕ ༽つ ಠ_ಠ
+Exercício de grafo baseado no algoritmo de Busca em Profundidade (BFS)
